@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="jquery-3.6.1.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>CRUD DEMO</title>
+    <style>
+        .ct-wrap {
+            display: flex;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <div class="container">
+        <h2>Form</h2>
+        <form class="form-horizontal">
+
+            <div class="form-group">
+                <div class="col-sm-10 pt-2 pb-2">
+                    <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 pt-2 pb-2">
+                    <input type="password" class="form-control" id="password" placeholder="Enter password"
+                        name="password">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 pt-2 pb-2">
+                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                </div>
+            </div>
+            <div class="ct-wrap">
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10 pt-2 pb-2">
+                        <input type="button" class="btn btn-primary text-uppercase" value="submit" onclick="test()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10 p-2">
+                        <input type="reset" class="btn btn-secondary text-uppercase" value="reset">
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+    <div class="container">
+        <br>
+        <div id="msg"></div><br>
+    </div>
+
+    <!-- <button onClick="window.print()">Print this page »</button> -->
+
+    <div class="container">
+        <h2>Data From Local Storage</h2>
+        <table class="table" id="table">
+            <thead align="center">
+                <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Email</th>
+                    <!-- <th>Action</td> -->
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+
+
+
+<script>
+    var row = null;
+    var addNew=true;
+    function test() {
+        //Retrieving data
+        var uid = document.getElementById("username").value;
+        var pw = document.getElementById("password").value;
+        var email = document.getElementById("email").value;
+        //  alert(uid + pw + email);
+
+        const obj = [uid, pw, email];
+            // "User name": uid,
+            // "Password": pw,
+            // "email" : email,
+        
+        // const myJSON = JSON.stringify(obj);
+        localStorage.setItem(obj[0], obj);
+
+
+
+
+        // const arr = [document.getElementById("username").value ,document.getElementById("password").value ,document.getElementById("email").value ];
+        //     for (let i = 0; i < 3 ; i++) {
+        //         localStorage.setItem("My_data: " + arr[i], JSON.stringify(arr[i]));
+        //     }
+
+
+
+        //storing data
+        // var user = localStorage.setItem("uid", uid);
+        // var pass = localStorage.setItem("pw", pw);
+        // var em = localStorage.setItem("email", email);
+
+
+
+        //Retreiving stored data and using it for calculation
+        // var user = localStorage.getItem("uid");
+        // var pass = localStorage.getItem("pw");
+        // var em = localStorage.getItem("email");
+
+
+        if (uid == "" || pw == "" || email == "") {
+            alert("please enter form all data");
+        }
+        else {
+
+             // find the first row of table
+             var rows =  table.rows;
+            var firstRow = rows[0];
+            // var check = false;
+            if (addNew == true){
+                var tovalue = firstRow.insertCell(3);
+                tovalue.innerHTML = "<b>Action</b>";
+                
+             }
+
+            if (row == null) {
+                //INSERT
+                row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+
+                cell1.innerHTML = document.getElementById("username").value;
+                cell2.innerHTML = document.getElementById("password").value;
+                cell3.innerHTML = document.getElementById("email").value;
+                cell4.innerHTML = "<button class='btn btn-success text-uppercase' onclick = edit(this)>Edit</button><button class='btn btn-danger ms-2 text-uppercase' onclick = remove(this)>Delete</button>";
+
+                msg.innerHTML = "<h5>Data Inserted!</h5>";
+            } else {
+                update();
+                msg.innerHTML = "<h5>Data Updated!</h5>";
+            }
+        }
+        addNew=false;
+        row = null;
+    }
+
+
+    //EDIT
+    function edit(td) {
+        row = td.parentElement.parentElement;
+        document.getElementById("username").value = row.cells[0].innerHTML;
+        document.getElementById("password").value = row.cells[1].innerHTML;
+        document.getElementById("email").value = row.cells[2].innerHTML;
+    }
+
+    // //UPDATE
+    function update() {
+        // alert(row);
+        row.cells[0].innerHTML = document.getElementById("username").value;
+        row.cells[1].innerHTML = document.getElementById("password").value;
+        row.cells[2].innerHTML = document.getElementById("email").value;
+        // row = null;
+        // alert(row);
+    }
+
+    //DELETE
+    function remove(td) {
+        var ans = confirm("Are you sure you want to delete this record");
+        if (ans == true) {
+            row = td.parentElement.parentElement;
+            document.getElementById("table").deleteRow(row.rowIndex);
+            // alert(row.rowIndex);
+            row = null;
+        }
+
+    }
+
+</script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> -->
+
+</html>
